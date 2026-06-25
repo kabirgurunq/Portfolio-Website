@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kabir Gurung — Filmmaker & Visual Storyteller</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Grotesk:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    /* === TOKENS === */
+    :root {
+      --noir:       #0a0a0a;
+      --charcoal:   #141414;
+      --iron:       #1f1f1f;
+      --fog:        #2e2e2e;
+      --silver:     #a8a8a8;
+      --moonlight:  #e8e4dc;
+      --amber:      #c8923a;
+      --amber-dim:  #7a4f12;
+      --film-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+
+      --display:  'Cormorant Garamond', Georgia, serif;
+      --body:     'Space Grotesk', system-ui, sans-serif;
+      --mono:     'Space Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--noir);
+      color: var(--moonlight);
+      font-family: var(--body);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Film grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: var(--film-grain);
+      background-size: 200px 200px;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+    }
+
+    /* === NAV === */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 3rem;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.97) 0%, transparent 100%);
+      backdrop-filter: blur(2px);
+      border-bottom: 1px solid rgba(200,146,58,0.12);
+    }
+
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 1.35rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--moonlight);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--amber); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--silver);
+      text-decoration: none;
+      transition: color 0.25s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--amber);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--amber); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* === PAGES === */
+    .page {
+      display: none;
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+
+    .page.active { display: block; }
+
+    /* === HERO (HOME) === */
+    #page-home {
+      display: none;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    #page-home.active {
+      display: flex;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(200,146,58,0.07) 0%, transparent 70%),
+                  linear-gradient(180deg, var(--noir) 0%, #0d0b08 100%);
+    }
+
+    /* Cinematic letterbox lines */
+    .hero-bg::before,
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 72px;
+      background: #000;
+    }
+    .hero-bg::before { top: 0; }
+    .hero-bg::after  { bottom: 0; }
+
+    .hero-content {
+      position: relative;
+      text-align: center;
+      padding: 2rem;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s forwards;
+    }
+
+    .hero-name {
+      font-family: var(--display);
+      font-size: clamp(4rem, 11vw, 9rem);
+      font-weight: 300;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      color: var(--moonlight);
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.55s forwards;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--amber);
+    }
+
+    .hero-tagline {
+      font-family: var(--body);
+      font-size: 0.95rem;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 3.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber);
+      border: 1px solid var(--amber);
+      padding: 0.85rem 2.5rem;
+      text-decoration: none;
+      cursor: pointer;
+      background: transparent;
+      transition: background 0.3s, color 0.3s;
+      opacity: 0;
+      animation: fadeUp 0.8s 1.05s forwards;
+    }
+
+    .hero-cta:hover {
+      background: var(--amber);
+      color: var(--noir);
+    }
+
+    /* Filmstrip bottom */
+    .filmstrip {
+      position: absolute;
+      bottom: 72px; left: 0; right: 0;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      opacity: 0.18;
+    }
+
+    .filmstrip-inner {
+      display: flex;
+      gap: 6px;
+      animation: filmroll 12s linear infinite;
+    }
+
+    .film-frame {
+      width: 24px; height: 24px;
+      border: 1px solid var(--silver);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* === SECTION SHARED === */
+    .section-header {
+      text-align: center;
+      padding: 5rem 2rem 3rem;
+    }
+
+    .section-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--moonlight);
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--amber);
+    }
+
+    .section-rule {
+      width: 48px; height: 1px;
+      background: var(--amber);
+      margin: 1.4rem auto 0;
+    }
+
+    /* === ABOUT PAGE === */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 3rem 6rem;
+    }
+
+    .about-photo-wrap {
+      position: relative;
+    }
+
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      filter: grayscale(40%) contrast(1.1);
+      display: block;
+    }
+
+    .about-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--iron);
+      border: 1px solid var(--fog);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: var(--silver);
+    }
+
+    .about-photo-placeholder svg {
+      opacity: 0.3;
+    }
+
+    .about-photo-placeholder span {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    /* Amber corner accent */
+    .about-photo-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: -10px; right: -10px;
+      width: 60px; height: 60px;
+      border-bottom: 2px solid var(--amber);
+      border-right: 2px solid var(--amber);
+    }
+
+    .about-text { padding: 1rem 0; }
+
+    .about-bio {
+      font-size: 1.05rem;
+      color: var(--silver);
+      line-height: 1.85;
+      margin-bottom: 2.5rem;
+    }
+
+    .about-bio strong {
+      color: var(--moonlight);
+      font-weight: 400;
+    }
+
+    .about-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 1rem;
+      align-items: baseline;
+    }
+
+    .meta-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      width: 90px;
+      flex-shrink: 0;
+    }
+
+    .meta-value {
+      font-size: 0.9rem;
+      color: var(--silver);
+    }
+
+    /* === FILMS PAGE === */
+    .films-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 3rem 6rem;
+    }
+
+    .film-card {
+      background: var(--charcoal);
+      border: 1px solid var(--fog);
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+
+    .film-card:hover {
+      border-color: var(--amber);
+      transform: translateY(-4px);
+    }
+
+    .film-thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: var(--iron);
+      overflow: hidden;
+    }
+
+    .film-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(30%);
+      transition: filter 0.4s;
+    }
+
+    .film-card:hover .film-thumb img { filter: grayscale(0%); }
+
+    .film-thumb-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--iron), var(--fog));
+    }
+
+    .play-icon {
+      width: 52px; height: 52px;
+      border: 1.5px solid var(--amber);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+
+    .film-card:hover .play-icon {
+      background: var(--amber);
+    }
+
+    .play-icon svg { margin-left: 4px; }
+
+    .film-info {
+      padding: 1.2rem 1.4rem;
+    }
+
+    .film-number {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--amber);
+      margin-bottom: 0.4rem;
+    }
+
+    .film-title {
+      font-family: var(--display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--moonlight);
+      margin-bottom: 0.4rem;
+    }
+
+    .film-desc {
+      font-size: 0.82rem;
+      color: var(--silver);
+      line-height: 1.6;
+    }
+
+    .add-film-note {
+      text-align: center;
+      margin: 0 3rem 6rem;
+      padding: 2rem;
+      border: 1px dashed var(--fog);
+      color: var(--silver);
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* === GALLERY PAGE === */
+    .gallery-grid {
+      columns: 3;
+      column-gap: 1.2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 3rem 6rem;
+    }
+
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 1.2rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--fog);
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+
+    .gallery-item:hover { border-color: var(--amber); }
+
+    .gallery-item img {
+      width: 100%;
+      display: block;
+      filter: grayscale(20%) contrast(1.05);
+      transition: filter 0.4s, transform 0.4s;
+    }
+
+    .gallery-item:hover img {
+      filter: grayscale(0%) contrast(1);
+      transform: scale(1.03);
+    }
+
+    .gallery-placeholder {
+      background: var(--iron);
+      aspect-ratio: 4/3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: var(--silver);
+    }
+
+    .gallery-placeholder:nth-child(odd) { aspect-ratio: 3/4; }
+    .gallery-placeholder:nth-child(3n) { aspect-ratio: 1/1; }
+
+    .gallery-placeholder svg { opacity: 0.25; }
+    .gallery-placeholder span {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.4;
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.7) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+    }
+
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    .gallery-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--moonlight);
+    }
+
+    /* === SKILLS PAGE === */
+    .skills-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 2rem 3rem 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem 4rem;
+    }
+
+    .skill-category { }
+
+    .skill-cat-title {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--fog);
+    }
+
+    .skill-item {
+      margin-bottom: 1.4rem;
+    }
+
+    .skill-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.4rem;
+    }
+
+    .skill-name {
+      font-size: 0.88rem;
+      color: var(--moonlight);
+    }
+
+    .skill-level {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--silver);
+      letter-spacing: 0.1em;
+    }
+
+    .skill-bar {
+      height: 2px;
+      background: var(--fog);
+      position: relative;
+    }
+
+    .skill-bar-fill {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      background: var(--amber);
+      transition: width 1s ease;
+    }
+
+    .tools-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .tool-chip {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--silver);
+      border: 1px solid var(--fog);
+      padding: 0.35rem 0.75rem;
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .tool-chip:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    /* === SOCIALS PAGE === */
+    .socials-wrap {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2rem 3rem 6rem;
+    }
+
+    .social-card {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.6rem 2rem;
+      border: 1px solid var(--fog);
+      margin-bottom: 1rem;
+      background: var(--charcoal);
+      text-decoration: none;
+      transition: border-color 0.3s, background 0.3s;
+      cursor: pointer;
+    }
+
+    .social-card:hover {
+      border-color: var(--amber);
+      background: var(--iron);
+    }
+
+    .social-icon {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--iron);
+      border: 1px solid var(--fog);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.3s;
+    }
+
+    .social-card:hover .social-icon { border-color: var(--amber); }
+
+    .social-info { flex: 1; }
+
+    .social-platform {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.2rem;
+    }
+
+    .social-handle {
+      font-family: var(--display);
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: var(--moonlight);
+    }
+
+    .social-arrow {
+      color: var(--silver);
+      transition: color 0.3s, transform 0.3s;
+    }
+
+    .social-card:hover .social-arrow {
+      color: var(--amber);
+      transform: translateX(4px);
+    }
+
+    /* === FOOTER === */
+    footer {
+      border-top: 1px solid var(--fog);
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-name {
+      font-family: var(--display);
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--silver);
+    }
+
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--silver);
+    }
+
+    /* === ANIMATIONS === */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes filmroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { gap: 1.4rem; }
+      .about-grid { grid-template-columns: 1fr; padding: 1.5rem; }
+      .films-grid { grid-template-columns: 1fr; padding: 1.5rem; }
+      .gallery-grid { columns: 2; padding: 1.5rem; }
+      .skills-wrap { grid-template-columns: 1fr; padding: 1.5rem; }
+      .socials-wrap { padding: 1.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links { gap: 1rem; }
+      .nav-links a { font-size: 0.6rem; letter-spacing: 0.1em; }
+      .gallery-grid { columns: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo" onclick="showPage('home')">Kabir<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#" onclick="showPage('about')">About</a></li>
+      <li><a href="#" onclick="showPage('films')">Films</a></li>
+      <li><a href="#" onclick="showPage('gallery')">Design</a></li>
+      <li><a href="#" onclick="showPage('skills')">Skills</a></li>
+      <li><a href="#" onclick="showPage('socials')">Connect</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== HOME ===== -->
+  <div id="page-home" class="page active">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Portfolio — 2025</p>
+      <h1 class="hero-name">Kabir<br><em>Gurung</em></h1>
+      <p class="hero-tagline">Filmmaking Enthusiast</p>
+      <button class="hero-cta" onclick="showPage('films')">View My Work</button>
+    </div>
+    <div class="filmstrip">
+      <div class="filmstrip-inner" id="filmstrip"></div>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT ===== -->
+  <div id="page-about" class="page">
+    <div class="section-header">
+      <p class="section-eyebrow">Who I Am</p>
+      <h2 class="section-title">A Little About <em>Me</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-photo-wrap">
+        <div class="about-photo-placeholder">
+            <img src="Me2.jpeg" alt="Kabir" width="500" height="680" class="responsive-img">
+        </div>
+      </div>
+      <div class="about-text">
+        <p class="about-bio">
+          My name is <strong>Kabir Gurung</strong> — a passionate filmmaker and visual storyteller based in Nepal. I'm drawn to the language of cinema: light, shadow, movement, and silence. Every frame is a chance to say something that words alone cannot.<br><br>
+          Alongside filmmaking, I'm on a journey into the world of <strong>information technology</strong>, learning the craft of building things on the web and shaping digital experiences. I believe creativity and technology are two sides of the same coin.
+        </p>
+        <div class="about-meta">
+          <div class="meta-row">
+            <span class="meta-label">Based in</span>
+            <span class="meta-value">Nepal</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Passion</span>
+            <span class="meta-value">Filmmaking, Visual Design</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Learning</span>
+            <span class="meta-value">Web Development, IT Fundamentals</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Available</span>
+            <span class="meta-value">For collaborations & projects</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FILMS ===== -->
+  <div id="page-films" class="page">
+    <div class="section-header">
+      <p class="section-eyebrow">My Work</p>
+      <h2 class="section-title">Films &amp; <em>Videos</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="films-grid">
+
+      <!-- Film Card 1 -->
+      <div class="film-card" onclick="openYouTube('https://youtu.be/o9lp2SkqI6M?si=_NUY9bI94Y2vISRK')">
+        <img src="Australian Camp Vlog Thumbnail.jpg" alt="Thumbnail" width="100%" height="auto" class="responsive-img">
+        <div class="film-info">
+          <p class="film-number">Vlog</p>
+          <h3 class="film-title">Australian Camp Vlog</h3>
+          <p class="film-desc">A short vlog exploring the nature and life of Australian Camp</p>
+        </div>
+      </div>
+
+      <!-- Film Card 2 -->
+      <div class="film-card" onclick="openYouTube('https://youtu.be/vib16yGxcjo?si=HJ8RqybM3AR31Lb3')">
+        <img src="Kyoi Sath Thumbnail.jpg" alt="Thumbnail" width="100%" height="auto" class="responsive-img">
+        <div class="film-info">
+          <p class="film-number">Music Video (Edit/Color)</p>
+          <h3 class="film-title">Kyoi Sath</h3>
+          <p class="film-desc">A Gurung song with the blend of gurung culture, story and life.</p>
+        </div>
+      </div>
+
+      <!-- Film Card 3 -->
+      <div class="film-card" onclick="openYouTube('https://youtu.be/FpjBPFS5ASs?si=kOQHKovJVHzsxzwl')">
+        <img src="Sapana Bhari Thumbnail.jpg" alt="Thumbnail" width="100%" height="auto" class="responsive-img">
+        <div class="film-info">
+          <p class="film-number">Music Video (Direction)</p>
+          <h3 class="film-title">Sapana Bhari</h3>
+          <p class="film-desc">A Tragic Nepali Song with emotional touch.</p>
+        </div>
+      </div>
+
+<!-- Film Card 4 -->
+      <div class="film-card" onclick="openYouTube('https://youtu.be/f6H1zMnT3ZI?si=47TB1D3ACK5sehX0')">
+        <img src="Poreta Thumbnail.jpg" alt="Thumbnail" width="100%" height="auto" class="responsive-img">
+        <div class="film-info">
+          <p class="film-number">Music Video (Starred)</p>
+          <h3 class="film-title">Poreta</h3>
+          <p class="film-desc">A lovely Gurung Song depicting typical Gurung livelihood and social structue.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="add-film-note">
+      VISIT MY LINKEDIN PROFILE TO DISCOVER ALL MY PROJECTS
+    </div>
+  </div>
+
+  <!-- ===== GALLERY ===== -->
+  <div id="page-gallery" class="page">
+    <div class="section-header">
+      <p class="section-eyebrow">Graphic Design</p>
+      <h2 class="section-title">Visual <em>Works</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="gallery-grid">
+
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <img src="Sapana Bhari Poster Final.png" alt="Poster" width="100%" height="auto" class="responsive-img">
+        </div>
+        <div class="gallery-overlay"><span class="gallery-label">Graphic Design 01</span></div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <img src="Chyaba Sai Maira Final Poster.jpg" alt="Poster" width="100%" height="auto" class="responsive-img">
+        </div>
+        <div class="gallery-overlay"><span class="gallery-label">Graphic Design 01</span></div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <img src="Chukchuke Rail First Poster no date.jpg" alt="Poster" width="100%" height="auto" class="responsive-img">
+        </div>
+        <div class="gallery-overlay"><span class="gallery-label">Graphic Design 01</span></div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <img src="Kashi Poster 3 Final.png" alt="Poster" width="100%" height="auto" class="responsive-img">
+        </div>
+        <div class="gallery-overlay"><span class="gallery-label">Graphic Design 01</span></div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <img src="Kyoi Sath FIrst Poster.png" alt="Poster" width="100%" height="auto" class="responsive-img">
+        </div>
+        <div class="gallery-overlay"><span class="gallery-label">Graphic Design 01</span></div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <img src="Chapa Fulyo Poster Design Final.jpg" alt="Poster" width="100%" height="auto" class="responsive-img">
+        </div>
+        <div class="gallery-overlay"><span class="gallery-label">Graphic Design 01</span></div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <img src="Ladai chha kanchi kashmirma Second Poster.jpg" alt="Poster" width="100%" height="auto" class="responsive-img">
+        </div>
+        <div class="gallery-overlay"><span class="gallery-label">Graphic Design 01</span></div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <img src="Poreta Second Poster.jpg" alt="Poster" width="100%" height="auto" class="responsive-img">
+        </div>
+        <div class="gallery-overlay"><span class="gallery-label">Graphic Design 01</span></div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <img src="Siklesaiko Seto Topi Poster.jpg" alt="Poster" width="100%" height="auto" class="responsive-img">
+        </div>
+        <div class="gallery-overlay"><span class="gallery-label">Graphic Design 01</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== SKILLS ===== -->
+  <div id="page-skills" class="page">
+    <div class="section-header">
+      <p class="section-eyebrow">What I Know</p>
+      <h2 class="section-title">Skills &amp; <em>Tools</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="skills-wrap">
+
+       <!-- Hobbies -->
+      <div class="skill-category">
+        <p class="skill-cat-title">My Hobbies</p>
+        <div class="tools-list">
+          <span class="tool-chip">Travelling</span>
+          <span class="tool-chip">Photography</span>
+          <span class="tool-chip">Filmmaking</span>
+          <span class="tool-chip">Sketching</span>
+          <span class="tool-chip">Basketball</span>
+          <span class="tool-chip">Dancing</span>
+          <span class="tool-chip">Acting</span>
+          <span class="tool-chip">Story Writing</span>
+          <span class="tool-chip">Technology Enthusiast</span>
+        </div>
+      </div>
+
+      <!-- Filmmaking -->
+      <div class="skill-category">
+        <p class="skill-cat-title">Filmmaking</p>
+        <div class="skill-item">
+          <div class="skill-row">
+            <span class="skill-name">Cinematography</span>
+            <span class="skill-level">Intermediate</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" style="width:65%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-row">
+            <span class="skill-name">Video Editing</span>
+            <span class="skill-level">Intermediate</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" style="width:60%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-row">
+            <span class="skill-name">Storytelling</span>
+            <span class="skill-level">Strong</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" style="width:75%"></div></div>
+        </div>
+      </div>
+
+      <!-- Design -->
+      <div class="skill-category">
+        <p class="skill-cat-title">Graphic Design</p>
+        <div class="skill-item">
+          <div class="skill-row">
+            <span class="skill-name">Adobe Photoshop</span>
+            <span class="skill-level">Learning</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" style="width:50%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-row">
+            <span class="skill-name">Canva</span>
+            <span class="skill-level">Comfortable</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" style="width:70%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-row">
+            <span class="skill-name">Visual Composition</span>
+            <span class="skill-level">Strong</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" style="width:72%"></div></div>
+        </div>
+      </div>
+
+      <!-- Web / IT -->
+      <div class="skill-category">
+        <p class="skill-cat-title">Web &amp; IT</p>
+        <div class="skill-item">
+          <div class="skill-row">
+            <span class="skill-name">HTML</span>
+            <span class="skill-level">Beginner</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" style="width:40%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-row">
+            <span class="skill-name">CSS</span>
+            <span class="skill-level">Beginner</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" style="width:35%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-row">
+            <span class="skill-name">IT Fundamentals</span>
+            <span class="skill-level">Learning</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" style="width:30%"></div></div>
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div class="skill-category">
+        <p class="skill-cat-title">Tools I Use</p>
+        <div class="tools-list">
+          <span class="tool-chip">Photoshop</span>
+          <span class="tool-chip">Canva</span>
+          <span class="tool-chip">Premiere Pro</span>
+          <span class="tool-chip">DaVinci Resolve</span>
+          <span class="tool-chip">VS Code</span>
+          <span class="tool-chip">YouTube Studio</span>
+          <span class="tool-chip">CapCut</span>
+          <span class="tool-chip">Lightroom</span>
+          <span class="tool-chip">Pro Tools</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+    </div>
+    <footer>
+      <span class="footer-name">Kabir Gurung</span>
+      <span class="footer-copy">© 2026 — All rights reserved</span>
+    </footer>
+  </div>
+
+  <!-- ===== SOCIALS ===== -->
+  <div id="page-socials" class="page">
+    <div class="section-header">
+      <p class="section-eyebrow">Let's Connect</p>
+      <h2 class="section-title">Find Me <em>Online</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="socials-wrap">
+
+      <!-- YouTube -->
+      <a class="social-card" href="https://youtube.com/@kabirgurunq" target="_blank" rel="noopener">
+        <div class="social-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8923a">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+            <polygon points="9.75,15.02 15.5,12 9.75,8.98 9.75,15.02" fill="#0a0a0a"/>
+          </svg>
+        </div>
+        <div class="social-info">
+          <p class="social-platform">YouTube</p>
+          <p class="social-handle">@kabirgurunq</p>
+        </div>
+        <svg class="social-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <!-- Instagram -->
+      <a class="social-card" href="https://instagram.com/kabirgurunq" target="_blank" rel="noopener">
+        <div class="social-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c8923a" stroke-width="1.5">
+            <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="#c8923a"/>
+          </svg>
+        </div>
+        <div class="social-info">
+          <p class="social-platform">Instagram</p>
+          <p class="social-handle">@kabirgurunq</p>
+        </div>
+        <svg class="social-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <!-- TikTok -->
+      <a class="social-card" href="https://tiktok.com/@kabirgurunq" target="_blank" rel="noopener">
+        <div class="social-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8923a">
+            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.53V6.76a4.85 4.85 0 01-1.02-.07z"/>
+          </svg>
+        </div>
+        <div class="social-info">
+          <p class="social-platform">TikTok</p>
+          <p class="social-handle">@kabirgurunq</p>
+        </div>
+        <svg class="social-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <!-- Facebook -->
+      <a class="social-card" href="https://facebook.com/kabirgurunq" target="_blank" rel="noopener">
+        <div class="social-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8923a">
+            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+          </svg>
+        </div>
+        <div class="social-info">
+          <p class="social-platform">Facebook</p>
+          <p class="social-handle">कविर गुरुङ</p>
+        </div>
+        <svg class="social-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <!-- LinkedIn -->
+      <a class="social-card" href="https://linkedin.com/in/kabir-gurung-b437b9373/" target="_blank" rel="noopener">
+        <div class="social-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8923a">
+            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/>
+          </svg>
+        </div>
+        <div class="social-info">
+          <p class="social-platform">LinkedIn</p>
+          <p class="social-handle">Kabir Gurung</p>
+        </div>
+        <svg class="social-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+
+    </div>
+    <footer>
+      <span class="footer-name">Kabir Gurung</span>
+      <span class="footer-copy">© 2026 — All rights reserved</span>
+    </footer>
+  </div>
+
+  <script>
+    // Page navigation
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    // YouTube link opener
+    function openYouTube(url) {
+      window.open(url, '_blank');
+    }
+
+    // Build filmstrip
+    const strip = document.getElementById('filmstrip');
+    // Duplicate for seamless loop
+    for (let i = 0; i < 80; i++) {
+      const f = document.createElement('div');
+      f.className = 'film-frame';
+      strip.appendChild(f);
+    }
+
+    // Intercept all nav clicks to prevent default
+    document.querySelectorAll('.nav-links a, .nav-logo').forEach(a => {
+      a.addEventListener('click', e => e.preventDefault());
+    });
+  </script>
+</body>
+</html>
